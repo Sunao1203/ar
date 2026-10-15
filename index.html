@@ -3,15 +3,61 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Camera Background</title>
     <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
 </head>
 
 <body>
     <a-scene>
-        <a-box position="0 0 -3" color="skyblue">
+
+        <a-assets>
+            <video
+                id="cameraVideo"
+                autoplay
+                playsinline
+                muted>
+            </video>
+        </a-assets>
+
+        <!-- カメラ -->
+        <a-camera position="0 0 0">
+
+            <!-- 背景にカメラ映像 -->
+            <a-video
+                src="#cameraVideo"
+                position="0 0 -5"
+                width="8"
+                height="4.5">
+            </a-video>
+
+        </a-camera>
+
+        <!-- 表示する箱 -->
+        <a-box
+            position="0 0 -3"
+            color="skyblue">
         </a-box>
+
     </a-scene>
+
+
+    <script>
+        const video = document.getElementById("cameraVideo");
+
+        navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "environment"
+            },
+            audio: false
+        })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(error => {
+            console.error("カメラを取得できませんでした", error);
+        });
+    </script>
+
 </body>
 
 </html>
