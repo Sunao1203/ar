@@ -1,62 +1,507 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Camera Background</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おもちゃの国</title>
+
     <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
 </head>
 
 <body>
+
     <a-scene>
 
-        <a-assets>
-            <video
-                id="cameraVideo"
-                autoplay
-                playsinline
-                muted>
-            </video>
-        </a-assets>
+        <!-- 空 -->
+        <a-sky color="lightblue"></a-sky>
 
-        <!-- カメラ -->
-        <a-camera position="0 0 0">
 
-            <!-- 背景にカメラ映像 -->
-            <a-video
-                src="#cameraVideo"
-                position="0 0 -5"
-                width="8"
-                height="4.5">
-            </a-video>
-
-        </a-camera>
-
-        <!-- 表示する箱 -->
-        <a-box
+        <!-- 地面 -->
+        <a-plane
             position="0 0 -3"
-            color="skyblue">
+            color="lightgreen"
+            width="20"
+            height="20"
+            rotation="-90 0 0">
+        </a-plane>
+
+
+        <!-- ============================= -->
+        <!-- 積み木のお城 -->
+        <!-- ============================= -->
+
+        <!-- お城中央 -->
+        <a-box
+            position="0 1.5 -6"
+            width="4"
+            height="3"
+            depth="1.5"
+            color="lightblue">
         </a-box>
 
+
+        <!-- 左の塔 -->
+        <a-box
+            position="-2.7 1.7 -6"
+            width="1.4"
+            height="3.4"
+            depth="1.5"
+            color="pink">
+        </a-box>
+
+
+        <!-- 右の塔 -->
+        <a-box
+            position="2.7 1.7 -6"
+            width="1.4"
+            height="3.4"
+            depth="1.5"
+            color="plum">
+        </a-box>
+
+
+        <!-- 左の屋根 -->
+        <a-cone
+            position="-2.7 3.9 -6"
+            color="royalblue"
+            radius-bottom="1"
+            radius-top="0"
+            height="1.5">
+        </a-cone>
+
+
+        <!-- 右の屋根 -->
+        <a-cone
+            position="2.7 3.9 -6"
+            color="purple"
+            radius-bottom="1"
+            radius-top="0"
+            height="1.5">
+        </a-cone>
+
+
+        <!-- お城の入口 -->
+        <a-box
+            position="0 0.8 -5.2"
+            width="1"
+            height="1.6"
+            depth="0.2"
+            color="saddlebrown">
+        </a-box>
+
+
+        <!-- 窓 -->
+        <a-box
+            position="-1.2 2 -5.2"
+            width="0.5"
+            height="0.7"
+            depth="0.2"
+            color="yellow">
+        </a-box>
+
+        <a-box
+            position="1.2 2 -5.2"
+            width="0.5"
+            height="0.7"
+            depth="0.2"
+            color="yellow">
+        </a-box>
+
+
+        <!-- お城上の積み木 -->
+        <a-box
+            position="-1.5 3.3 -6"
+            width="0.7"
+            height="0.6"
+            depth="1.5"
+            color="lightblue">
+        </a-box>
+
+        <a-box
+            position="0 3.3 -6"
+            width="0.7"
+            height="0.6"
+            depth="1.5"
+            color="lightblue">
+        </a-box>
+
+        <a-box
+            position="1.5 3.3 -6"
+            width="0.7"
+            height="0.6"
+            depth="1.5"
+            color="lightblue">
+        </a-box>
+
+
+
+        <!-- ============================= -->
+        <!-- お人形 -->
+        <!-- ============================= -->
+
+        <a-entity position="-4 2 -2">
+
+            <!-- 頭 -->
+            <a-sphere
+                position="0 1 0"
+                color="bisque"
+                radius="0.8">
+            </a-sphere>
+
+
+            <!-- 体・ワンピース -->
+            <a-cone
+                position="0 -0.3 0"
+                color="orange"
+                radius-bottom="0.8"
+                radius-top="0.4"
+                height="1.7">
+            </a-cone>
+
+
+            <!-- 左足 -->
+            <a-cylinder
+                position="-0.3 -1.5 0"
+                radius="0.18"
+                height="0.8"
+                color="white">
+            </a-cylinder>
+
+
+            <!-- 右足 -->
+            <a-cylinder
+                position="0.3 -1.5 0"
+                radius="0.18"
+                height="0.8"
+                color="white">
+            </a-cylinder>
+
+
+            <!-- 左腕 -->
+            <a-cylinder
+                position="-0.8 -0.2 0"
+                radius="0.15"
+                height="0.8"
+                rotation="0 0 -60"
+                color="bisque">
+            </a-cylinder>
+
+
+            <!-- 右腕 -->
+            <a-cylinder
+                position="0.8 -0.2 0"
+                radius="0.15"
+                height="0.8"
+                rotation="0 0 60"
+                color="bisque">
+            </a-cylinder>
+
+
+            <!-- 左目 -->
+            <a-sphere
+                position="-0.25 1.15 0.72"
+                radius="0.07"
+                color="black">
+            </a-sphere>
+
+
+            <!-- 右目 -->
+            <a-sphere
+                position="0.25 1.15 0.72"
+                radius="0.07"
+                color="black">
+            </a-sphere>
+
+
+            <!-- 口 -->
+            <a-box
+                position="0 0.8 0.75"
+                width="0.3"
+                height="0.05"
+                depth="0.05"
+                color="red">
+            </a-box>
+
+        </a-entity>
+
+
+
+        <!-- ============================= -->
+        <!-- 鳥さん -->
+        <!-- ============================= -->
+
+        <a-entity position="4 1.5 -2">
+
+            <!-- 体 -->
+            <a-sphere
+                position="0 0 0"
+                color="yellow"
+                radius="0.8">
+            </a-sphere>
+
+
+            <!-- 頭 -->
+            <a-sphere
+                position="0 0.8 0"
+                color="yellow"
+                radius="0.6">
+            </a-sphere>
+
+
+            <!-- 左目 -->
+            <a-sphere
+                position="-0.2 0.95 0.52"
+                color="black"
+                radius="0.07">
+            </a-sphere>
+
+
+            <!-- 右目 -->
+            <a-sphere
+                position="0.2 0.95 0.52"
+                color="black"
+                radius="0.07">
+            </a-sphere>
+
+
+            <!-- くちばし -->
+            <a-cone
+                position="0 0.7 0.75"
+                color="orange"
+                radius-bottom="0.25"
+                radius-top="0"
+                height="0.6"
+                rotation="90 0 0">
+            </a-cone>
+
+
+            <!-- 左羽 -->
+            <a-box
+                position="-0.8 0 0"
+                width="0.8"
+                height="0.25"
+                depth="0.5"
+                rotation="0 0 -30"
+                color="gold">
+            </a-box>
+
+
+            <!-- 右羽 -->
+            <a-box
+                position="0.8 0 0"
+                width="0.8"
+                height="0.25"
+                depth="0.5"
+                rotation="0 0 30"
+                color="gold">
+            </a-box>
+
+
+            <!-- 左足 -->
+            <a-cylinder
+                position="-0.25 -0.8 0"
+                radius="0.08"
+                height="0.5"
+                color="orange">
+            </a-cylinder>
+
+
+            <!-- 右足 -->
+            <a-cylinder
+                position="0.25 -0.8 0"
+                radius="0.08"
+                height="0.5"
+                color="orange">
+            </a-cylinder>
+
+        </a-entity>
+
+
+
+        <!-- ============================= -->
+        <!-- 周りの積み木 -->
+        <!-- ============================= -->
+
+        <a-box
+            position="-5 0.5 -5"
+            width="1"
+            height="1"
+            color="royalblue">
+        </a-box>
+
+        <a-box
+            position="-4 0.4 -5"
+            width="0.8"
+            height="0.8"
+            color="pink">
+        </a-box>
+
+
+        <a-cylinder
+            position="4.5 0.7 -5"
+            radius="0.5"
+            height="1.4"
+            color="orange">
+        </a-cylinder>
+
+
+        <a-cone
+            position="5.5 0.7 -5"
+            radius-bottom="0.6"
+            radius-top="0"
+            height="1.4"
+            color="purple">
+        </a-cone>
+
+
+        <a-sphere
+            position="-5 0.5 -1"
+            radius="0.5"
+            color="yellow">
+        </a-sphere>
+
+
+        <a-box
+            position="5 0.5 -1"
+            width="1"
+            height="1"
+            color="lightblue">
+        </a-box>
+
+
+                <!-- ============================= -->
+        <!-- おもちゃの国を囲む線路 -->
+        <!-- ============================= -->
+
+        <!-- 前 -->
+        <a-box
+        position="0 0.05 3"
+        width="16"
+        height="0.1"
+        depth="0.8"
+        color="dimgray"
+        ></a-box>
+
+        <!-- 後ろ -->
+        <a-box
+        position="0 0.05 -9"
+        width="16"
+        height="0.1"
+        depth="0.8"
+        color="dimgray"
+        ></a-box>
+
+        <!-- 左 -->
+        <a-box
+        position="-8 0.05 -3"
+        width="0.8"
+        height="0.1"
+        depth="12"
+        color="dimgray"
+        ></a-box>
+
+        <!-- 右 -->
+        <a-box
+        position="8 0.05 -3"
+        width="0.8"
+        height="0.1"
+        depth="12"
+        color="dimgray"
+        ></a-box>
+
+
+        <!-- ============================= -->
+        <!-- 電車 -->
+        <!-- ============================= -->
+
+        <!-- 車体 -->
+        <a-box
+        position="-4 0.7 3"
+        width="2.2"
+        height="1"
+        depth="1"
+        color="tomato"
+        ></a-box>
+
+        <!-- 屋根 -->
+        <a-box
+        position="-4 1.4 3"
+        width="1.7"
+        height="0.5"
+        depth="1"
+        color="crimson"
+        ></a-box>
+
+        <!-- 窓1 -->
+        <a-box
+        position="-4.5 0.8 3.52"
+        width="0.35"
+        height="0.35"
+        depth="0.05"
+        color="lightblue"
+        ></a-box>
+
+        <!-- 窓2 -->
+        <a-box
+        position="-4 0.8 3.52"
+        width="0.35"
+        height="0.35"
+        depth="0.05"
+        color="lightblue"
+        ></a-box>
+
+        <!-- 窓3 -->
+        <a-box
+        position="-3.5 0.8 3.52"
+        width="0.35"
+        height="0.35"
+        depth="0.05"
+        color="lightblue"
+        ></a-box>
+
+        <!-- 車輪1 -->
+        <a-cylinder
+        position="-4.7 0.2 2.55"
+        radius="0.22"
+        height="0.2"
+        rotation="90 0 0"
+        color="black"
+        ></a-cylinder>
+
+        <!-- 車輪2 -->
+        <a-cylinder
+        position="-3.3 0.2 2.55"
+        radius="0.22"
+        height="0.2"
+        rotation="90 0 0"
+        color="black"
+        ></a-cylinder>
+
+        <!-- 車輪3 -->
+        <a-cylinder
+        position="-4.7 0.2 3.45"
+        radius="0.22"
+        height="0.2"
+        rotation="90 0 0"
+        color="black"
+        ></a-cylinder>
+
+        <!-- 車輪4 -->
+        <a-cylinder
+        position="-3.3 0.2 3.45"
+        radius="0.22"
+        height="0.2"
+        rotation="90 0 0"
+        color="black"
+        ></a-cylinder>
+
+        <!-- カメラ -->
+        <a-camera
+            position="0 3 10">
+        </a-camera>
+
     </a-scene>
-
-
-    <script>
-        const video = document.getElementById("cameraVideo");
-
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: "environment"
-            },
-            audio: false
-        })
-        .then(stream => {
-            video.srcObject = stream;
-        })
-        .catch(error => {
-            console.error("カメラを取得できませんでした", error);
-        });
-    </script>
 
 </body>
 
