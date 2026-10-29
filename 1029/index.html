@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
+
+    <style>
+        #hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="hud">
+        <p>FROG HP: <span id="frogHpText">50</span></p>
+        <progress id="frogHpBar" max="50" value="50"></progress>
+
+        <br>
+        <p>My HP: <span id="myHpText">50</span></p>
+        <progress id="myHpBar" max="50" value="50"></progress>
+        
+        <p id="gameOver"></p>
+    </div>
+
+
+    <a-scene
+        embedded
+        arjs="sourceType: webcam"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .clickable">
+
+        <a-marker preset="hiro" smooth="true">
+
+            <a-entity id="model" position="0 0 0.5">
+
+                <a-gltf-model
+                    id="frog"
+                    class="clickable"
+                    src="frog.glb"
+                    position="0 0 0"
+                    scale="0.3 0.3 0.3"
+                    rotation="-90 0 0"
+                    animation-mixer="clip: CharacterArmature|Idle">
+                </a-gltf-model>
+
+            </a-entity>
+
+        </a-marker>
+
+        <a-entity camera></a-entity>
+
+    </a-scene>
+
+
+    <script>
+
+        const frog = document.getElementById("frog");
+
+        const frogHpText = document.getElementById("frogHpText");
+        const frogHpBar = document.getElementById("frogHpBar");
+
+        const myHpText = document.getElementById("myHpText");
+        const myHpBar = document.getElementById("myHpBar");
+
+        const gameOver = document.getElementById("gameOver");
+
+        let frogHp = 50;
+        let myHp = 50;
+
+
+        const hitSound = new Audio("hit.mp3");
+        const missSound = new Audio("miss.mp3");
+        const deathSound = new Audio("death.mp3");
+
+
+        function attack() {
+
+            if (frogHp === 0 || myHp === 0) {
+                return;
+            }
+
+
+            if (Math.random() < 0.3) {
+
+                missSound.play();
+
+                return;
+            }
+
+
+            let damage = Math.floor(Math.random() * 10) + 1;
+
+            frogHp -= damage;
+
+
+            if (frogHp < 0) {
+                frogHp = 0;
+            }
+
+
+            frogHpText.textContent = frogHp;
+            frogHpBar.value = frogHp;
+
+
+            if (frogHp === 0) {
+
+                deathAnimation();gameOver.textContent = "YOU WIN";
+
+            } else {
+
+                hitAnimation();
+
+            }
+
+        }
+
+
+        function hitAnimation() {
+
+            frog.removeAttribute("animation-mixer");
+
+            frog.setAttribute(
+                "animation-mixer",
+                {
+                    clip: "CharacterArmature|HitReact",
+                    loop: "once"
+                }
+            );
+
+            hitSound.play();
+
+        }
+
+
+        frog.addEventListener("click", attack);
+
+
+        function deathAnimation() {
+
+            frog.removeAttribute("animation-mixer");
+
+            frog.setAttribute(
+                "animation-mixer",
+                {
+                    clip: "CharacterArmature|Death",
+                    loop: "once",
+                    clampWhenFinished: true
+                }
+            );
+
+            deathSound.play();
+
+        }
+
+
+        const enemySound = new Audio("enemy-attack.mp3");
+
+
+        function enemyAttack() {
+
+            enemyAnimation();
+
+            myHp -= Math.floor(Math.random() * 10 + 1);
+
+
+            if (myHp < 0) {
+                myHp = 0;
+            }
+
+
+            myHpText.textContent = myHp;
+            myHpBar.value = myHp;
+
+            if (myHp === 0) {
+        gameOver.textContent = "GAME OVER";
+    }
+
+        }
+
+
+        function enemyAnimation() {
+
+            frog.removeAttribute("animation-mixer");
+
+            frog.setAttribute(
+                "animation-mixer",
+                {
+                    clip: "CharacterArmature|Punch",
+                    loop: "once"
+                }
+            );
+
+            enemySound.play();
+
+        }
+
+
+        frog.addEventListener("animation-finished", function (event) {
+
+            if (
+                event.detail.action.getClip().name
+                === "CharacterArmature|HitReact"
+            ) {
+
+                enemyAttack();
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
