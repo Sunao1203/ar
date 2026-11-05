@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.6.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/projapayuri/aframe-gesture-hands@v0.9.2/aframe-gesture-hands.js"></script>
+</head>
+
+<body>
+    <a-scene
+        id="scene"
+        hands
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .magic-btn">
+
+        <a-gltf-model
+            id="model"
+            src="magic_circle/c_cyan.glb"
+            animation-mixer="clip: MagicCircle_Loop"
+            position="0 0.4 -3"
+            rotation="-90 0 0"
+            scale="2 2 2">
+        </a-gltf-model>
+
+        <a-plane
+            id="cyan-panel"
+            class="magic-btn"
+            color="#70d8f6"
+            opacity="0.9"
+            width="0.75"
+            height="0.35"
+            position="-1.35 -0.8 -2">
+        </a-plane>
+        <a-text
+            value="CYAN"
+            align="center"
+            color="#111111"
+            width="2"
+            position="-1.35 -0.8 -1.99">
+        </a-text>
+
+        <a-plane
+            id="gold-panel"
+            class="magic-btn"
+            color="#f3c96b"
+            opacity="0.9"
+            width="0.75"
+            height="0.35"
+            position="-0.45 -0.8 -2">
+        </a-plane>
+        <a-text
+            value="GOLD"
+            align="center"
+            color="#111111"
+            width="2"
+            position="-0.45 -0.8 -1.99">
+        </a-text>
+
+        <a-plane
+            id="violet-panel"
+            class="magic-btn"
+            color="#b993ef"
+            opacity="0.9"
+            width="0.75"
+            height="0.35"
+            position="0.45 -0.8 -2">
+        </a-plane>
+        <a-text
+            value="VIOLET"
+            align="center"
+            color="#111111"
+            width="2"
+            position="0.45 -0.8 -1.99">
+        </a-text>
+
+        <a-plane
+            id="rose-panel"
+            class="magic-btn"
+            color="#ed93ad"
+            opacity="0.9"
+            width="0.75"
+            height="0.35"
+            position="1.35 -0.8 -2">
+        </a-plane>
+        <a-text
+            value="ROSE"
+            align="center"
+            color="#111111"
+            width="2"
+            position="1.35 -0.8 -1.99">
+        </a-text>
+
+        <a-camera position="0 0 0"></a-camera>
+    </a-scene>
+
+    <script>
+        const scene = document.getElementById("scene");
+        const model = document.getElementById("model");
+
+        const circleSound =
+            new Audio("magic_circle/circle.mp3");
+
+        const buttons = [
+            {
+                id: "cyan-panel",
+                file: "magic_circle/c_cyan.glb"
+            },
+            {
+                id: "gold-panel",
+                file: "magic_circle/c_gold.glb"
+            },
+            {
+                id: "violet-panel",
+                file: "magic_circle/c_violet.glb"
+            },
+            {
+                id: "rose-panel",
+                file: "magic_circle/c_rose.glb"
+            }
+        ];
+
+        const wasInside = {};
+
+        function changeCircle(file) {
+            model.setAttribute("src", file);
+
+            circleSound.currentTime = 0;
+            circleSound.play().catch(() => {});
+        }
+
+        buttons.forEach(button => {
+            button.element =
+                document.getElementById(button.id);
+
+            wasInside[button.id] = false;
+
+            button.element.addEventListener("click", () => {
+                changeCircle(button.file);
+            });
+        });
+
+        function checkTouch() {
+            const hands = scene.components.hands;
+            if (!hands) return;
+
+            buttons.forEach(button => {
+                const inside = hands.isPointOnEntity(
+                    8, button.element
+                );
+
+                if (inside && !wasInside[button.id]) {
+                    changeCircle(button.file);
+                }
+
+                wasInside[button.id] = inside;
+            });
+        }
+
+        scene.addEventListener("hand-result", checkTouch);
+    </script>
+</body>
+</html>
