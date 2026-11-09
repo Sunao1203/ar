@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>糸島AR観光</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.5.0/dist/aframe-master.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.6.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/projapayuri/aframe-gesture-hands@v0.9.2/aframe-gesture-hands.js"></script>
+
+    <style>
+        #hud {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 18px 10px;
+        }
+
+        #title {
+            color: white;
+            text-shadow: 1px 1px 4px black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="hud">
+        <h2 id="title">福岡県 糸島市</h2>
+        <button id="startBtn">旅をはじめる</button>
+    </div>
+
+    <a-scene
+        hands
+        id="scene"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .touch-btn">
+
+        <a-assets>
+            <video
+                id="video"
+                src="intro.mp4"
+                preload="auto"
+                playsinline>
+            </video>
+        </a-assets>
+
+        <!-- 動画画面 -->
+        <a-video
+            id="screen"
+            src="#video"
+            width="3.2"
+            height="1.8"
+            position="0 0.3 -2.5">
+        </a-video>
+
+        <a-entity id="menu" visible="false">
+
+    <a-plane
+        color="#183544"
+        width="4.2"
+        height="1.4"
+        position="0 0.2 -2.45">
+    </a-plane>
+
+    <a-text
+        value="ITOSHIMA"
+        align="center"
+        color="white"
+        width="4"
+        position="0 0.65 -2.4">
+    </a-text>
+
+    <!-- 塩とプリン -->
+    <a-plane
+        id="salt"
+        class="touch-btn"
+        color="#f2d59b"
+        width="0.9"
+        height="0.45"
+        position="-1.5 -0.1 -2.3">
+    </a-plane>
+
+    <a-text
+        value="Pudding"
+        align="center"
+        color="black"
+        width="2.5"
+        position="-1.5 -0.1 -2.29">
+    </a-text>
+
+    <!-- 夫婦岩 -->
+    <a-plane
+        id="futamigaura"
+        class="touch-btn"
+        color="#eeb2a1"
+        width="0.9"
+        height="0.45"
+        position="-0.5 -0.1 -2.3">
+    </a-plane>
+
+    <a-text
+        value="Sea"
+        align="center"
+        color="black"
+        width="2.5"
+        position="-0.5 -0.1 -2.29">
+    </a-text>
+
+    <!-- 白糸の滝 -->
+    <a-plane
+        id="falls"
+        class="touch-btn"
+        color="#a7d8c1"
+        width="0.9"
+        height="0.45"
+        position="0.5 -0.1 -2.3">
+    </a-plane>
+
+    <a-text
+        value="Waterfall"
+        align="center"
+        color="black"
+        width="2.5"
+        position="0.5 -0.1 -2.29">
+    </a-text>
+
+    <!-- 立石山 -->
+    <a-plane
+        id="mountain"
+        class="touch-btn"
+        color="#9ccbea"
+        width="0.9"
+        height="0.45"
+        position="1.5 -0.1 -2.3">
+    </a-plane>
+
+    <a-text
+        value="Mountain"
+        align="center"
+        color="black"
+        width="2.5"
+        position="1.5 -0.1 -2.29">
+    </a-text>
+
+</a-entity>
+
+        <a-camera position="0 0 0"></a-camera>
+
+    </a-scene>
+
+    <script>
+        const scene = document.getElementById("scene");
+        const video = document.getElementById("video");
+        const screen = document.getElementById("screen");
+        const menu = document.getElementById("menu");
+
+        const salt = document.getElementById("salt");
+        const futamigaura = document.getElementById("futamigaura");
+        const falls = document.getElementById("falls");
+        const mountain = document.getElementById("mountain");
+
+        let wasSaltInside = false;
+        let wasFutamigauraInside = false;
+        let wasFallsInside = false;
+        let wasMountainInside = false;
+
+        let menuVisible = false;
+
+        // 動画を切り替える
+        function changeVideo(file) {
+
+            menuVisible = false;
+
+            menu.setAttribute("visible", false);
+            screen.setAttribute("visible", true);
+
+            video.pause();
+            video.src = file;
+            video.load();
+
+            video.muted = false;
+
+            video.play().catch(function () {
+                video.muted = true;
+                video.play();
+            });
+        }
+
+        // 最初のオープニング
+        document.getElementById("startBtn")
+            .addEventListener("click", function () {
+
+                document.getElementById("startBtn")
+                    .style.display = "none";
+
+                changeVideo("intro.mp4");
+            });
+
+        // 動画が終わったら選択画面に戻る
+        video.addEventListener("ended", function () {
+
+            screen.setAttribute("visible", false);
+            menu.setAttribute("visible", true);
+
+            menuVisible = true;
+
+            wasSaltInside = false;
+            wasFutamigauraInside = false;
+            wasFallsInside = false;
+            wasMountainInside = false;
+        });
+
+        // 指でボタンをタッチする
+        function controlVideo() {
+
+            if (!menuVisible) {
+                return;
+            }
+
+            const hands = scene.components.hands;
+
+            if (!hands) {
+                return;
+            }
+
+            const saltInside =
+                hands.isPointOnEntity(8, salt);
+
+            const futamigauraInside =
+                hands.isPointOnEntity(8, futamigaura);
+
+            const fallsInside =
+                hands.isPointOnEntity(8, falls);
+
+            const mountainInside =
+                hands.isPointOnEntity(8, mountain);
+
+            if (saltInside && !wasSaltInside) {
+                changeVideo("salt_pudding.mp4");
+            }
+
+            else if (futamigauraInside && !wasFutamigauraInside) {
+                changeVideo("futamigaura_sunset.mp4");
+            }
+
+            else if (fallsInside && !wasFallsInside) {
+                changeVideo("shiraito_falls.mp4");
+            }
+
+            else if (mountainInside && !wasMountainInside) {
+                changeVideo("tateishiyama.mp4");
+            }
+
+            wasSaltInside = saltInside;
+            wasFutamigauraInside = futamigauraInside;
+            wasFallsInside = fallsInside;
+            wasMountainInside = mountainInside;
+        }
+
+        scene.addEventListener("hand-result", controlVideo);
+
+        // マウスクリックにも対応
+        salt.addEventListener("click", function () {
+            if (menuVisible) changeVideo("salt_pudding.mp4");
+        });
+
+        futamigaura.addEventListener("click", function () {
+            if (menuVisible) changeVideo("futamigaura_sunset.mp4");
+        });
+
+        falls.addEventListener("click", function () {
+            if (menuVisible) changeVideo("shiraito_falls.mp4");
+        });
+
+        mountain.addEventListener("click", function () {
+            if (menuVisible) changeVideo("tateishiyama.mp4");
+        });
+
+    </script>
+
+</body>
+</html>
